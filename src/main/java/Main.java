@@ -1,5 +1,7 @@
 import config.BotConfig;
 import listener.CommandListener;
+import member_alerts.MemberAlerts;
+
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -19,7 +21,7 @@ public class Main {
         try {
             jda = JDABuilder.createDefault(botToken)
                     .enableIntents(EnumSet.allOf(GatewayIntent.class))
-                    .addEventListeners(new CommandListener())
+                    .addEventListeners(new CommandListener(), new MemberAlerts())
                     .build();
             jda.awaitReady();
             log.info("Bot is ready!");
