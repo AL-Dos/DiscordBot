@@ -1,6 +1,7 @@
 package member_alerts;
 
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMaxMembersEvent;
@@ -26,7 +27,6 @@ public class MemberAlerts extends ListenerAdapter {
         String userMention = event.getUser().getAsMention();
         int index = (int) (Math.random() * messages.size());
         String welcomeMessage = String.format(messages.get(index), userMention);
-
         Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel().sendMessage(welcomeMessage).queue();
 
     }
@@ -41,5 +41,11 @@ public class MemberAlerts extends ListenerAdapter {
     public void onGuildUpdateMaxMembers(@NotNull GuildUpdateMaxMembersEvent event) {
         TextChannel targetChannel = Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel();
         targetChannel.sendMessage("Server is full! Can't accommodate any more users!").queue();
+    }
+
+    @Override
+    public void onGuildBan (@NotNull GuildBanEvent event) {
+        TextChannel targetChannel = Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel();
+        targetChannel.sendMessage(event.getUser().getAsTag() + "You have been banned!").queue();
     }
 }
