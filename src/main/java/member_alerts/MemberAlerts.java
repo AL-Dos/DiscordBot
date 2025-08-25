@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMaxMembersEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -47,5 +48,21 @@ public class MemberAlerts extends ListenerAdapter {
     public void onGuildBan (@NotNull GuildBanEvent event) {
         TextChannel targetChannel = Objects.requireNonNull(event.getGuild().getDefaultChannel()).asTextChannel();
         targetChannel.sendMessage(event.getUser().getAsTag() + "You have been banned!").queue();
+    }
+
+    @Override
+    public void onGuildMemberUpdateNickname(@NotNull GuildMemberUpdateNicknameEvent event) {
+        String oldName = event.getOldNickname();
+        String newName = event.getNewNickname();
+        String userName = event.getUser().getAsTag();
+
+        // if no nickname before, then use the userName
+        if (oldName == null) oldName = userName;
+        if (newName == null) newName = userName;
+
+        String channelId = "1407796709760700581";
+
+        TextChannel targetChannel = Objects.requireNonNull(event.getGuild().getTextChannelById(channelId));
+        targetChannel.sendMessage("*" + userName + "* change nickname from " + oldName + " to " + newName + ".").queue();
     }
 }

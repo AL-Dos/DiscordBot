@@ -1,5 +1,6 @@
 import config.BotConfig;
 import listener.CommandListener;
+import listener.VoiceListener;
 import member_alerts.MemberAlerts;
 
 import net.dv8tion.jda.api.JDA;
@@ -10,6 +11,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
+import java.util.Objects;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -21,7 +23,7 @@ public class Main {
         try {
             jda = JDABuilder.createDefault(botToken)
                     .enableIntents(EnumSet.allOf(GatewayIntent.class))
-                    .addEventListeners(new CommandListener(), new MemberAlerts())
+                    .addEventListeners(new CommandListener(), new MemberAlerts(), new VoiceListener())
                     .build();
             jda.awaitReady();
             log.info("Bot is ready!");
@@ -39,14 +41,20 @@ public class Main {
         }
 
         log.info("Registering slash commands...");
-        jda.updateCommands()
+        String guildID = "1407796708741611730";
+        Objects.requireNonNull(jda.getGuildById(guildID))
+                .updateCommands()
                 .addCommands(
                         Commands.slash("ping", "Checks the latency for JavaBot's Discord gateway."),
                         Commands.slash("info", "Displays the information of JavaBot."),
-                        Commands.slash("echo", "Echoes your own message")
-                                .addOption(OptionType.STRING,"text", "This is an echo", true)
+                        Commands.slash("echo", "Echoes your own message.")
+                                .addOption(OptionType.STRING,"text", "This is an echo.", true),
+                        Commands.slash("music", "Play music through one of voice channels."),
+                        Commands.slash("ban", "Ban a user from the server.")
+                                .addOption(OptionType.USER, "user", "The user to ban", true)
+                                .addOption(OptionType.STRING, "reason", "Reason for ban", false)
                 )
-                .queue(succes -> log.info("Slash commands successfully registered!"),
+                .queue(_ -> log.info("Slash commands successfully registered!"),
                         failed -> log.error("Slash commands failed: ", failed)
                 );
     }
