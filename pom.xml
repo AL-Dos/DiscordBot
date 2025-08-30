@@ -19,6 +19,13 @@
         <logback.version>1.5.18</logback.version> <!-- Latest Logback version -->
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- JUnit 5 -->
         <dependency>
@@ -55,16 +62,18 @@
             <version>${slf4j.version}</version>
         </dependency>
 
+        <!-- Logs -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
 
+        <!-- Lavaplayer -->
         <dependency>
-            <groupId>dev.arbjerg</groupId>
-            <artifactId>lavaplayer</artifactId>
-            <version>2.2.4</version>
+            <groupId>com.github.walkyst</groupId>
+            <artifactId>lavaplayer-fork</artifactId>
+            <version>1.4.3</version>
         </dependency>
     </dependencies>
 

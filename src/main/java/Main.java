@@ -49,7 +49,8 @@ public class Main {
                         Commands.slash("info", "Displays the information of JavaBot."),
                         Commands.slash("echo", "Echoes your own message.")
                                 .addOption(OptionType.STRING,"text", "This is an echo.", true),
-                        Commands.slash("music", "Play music through one of voice channels."),
+                        Commands.slash("music", "Play music through one of voice channels.")
+                                .addOption(OptionType.STRING,"url", "Youtube link or other link.", true),
                         Commands.slash("ban", "Ban a user from the server.")
                                 .addOption(OptionType.USER, "user", "The user to ban", true)
                                 .addOption(OptionType.STRING, "reason", "Reason for ban", false)

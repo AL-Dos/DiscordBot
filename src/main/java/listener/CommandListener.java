@@ -15,7 +15,6 @@ import java.util.Map;
 public class CommandListener extends ListenerAdapter {
     private static final Logger log = LoggerFactory.getLogger(CommandListener.class);
     private final Map<String, Command> commands = new HashMap<>();
-    private static final String ADMIN_ROLE = "Admin";
 
     public CommandListener() {
         commands.put("ping", new PingCommand());

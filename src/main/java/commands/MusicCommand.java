@@ -1,5 +1,6 @@
 package commands;
 
+import audio.PlayerManager;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -39,7 +40,23 @@ public class MusicCommand implements Command {
 
         AudioManager audioManager = Objects.requireNonNull(event.getGuild()).getAudioManager();
         audioManager.openAudioConnection(channel);
-        event.reply("JavaBot joined " + channel.getName() + "!").queue();
+
+        audioManager.setSendingHandler(
+                PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).getSendHandler()
+        );
+
+        String url = event.getOption("url") != null ? Objects.requireNonNull(event.getOption("url")).getAsString() : null;
+
+        event.deferReply().setEphemeral(true).queue();
+
+        if (url != null) {
+            PlayerManager playerManager = PlayerManager.getInstance();
+            playerManager.loadAndPlay(event.getGuild(), url);
+            event.reply("Playing:  " + url).queue();
+        }
+        else {
+            event.reply("Please provide a url.").setEphemeral(true).queue();
+        }
 
         long guildId = event.getGuild().getIdLong();
         if (timeouts.containsKey(guildId)) {
